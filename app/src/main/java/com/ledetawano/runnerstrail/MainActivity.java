@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     LocationListener locationListener;
     TextView longitudeTextView;
     TextView latitudeTextView;
+    TextView currentLocationTextView;
     Button getLocation;
 
     @Override
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         longitudeTextView = (TextView) findViewById(R.id.longitudeTextView);
         latitudeTextView = (TextView) findViewById(R.id.latitudeTextView);
         getLocation = (Button) findViewById(R.id.currentLocation);
+        currentLocationTextView = (TextView) findViewById(R.id.currentLocationTextView);
 
          locationManager =  (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
@@ -78,7 +80,39 @@ public class MainActivity extends AppCompatActivity {
                         // concatenate users full address if info is available
                         String fullAddress = "";
 
-                        Toast.makeText(getApplicationContext(), listAddress.get(0).toString(), Toast.LENGTH_LONG).show();
+
+                        if (listAddress.get(0).getSubThoroughfare() != null) {
+
+                            fullAddress += listAddress.get(0).getSubThoroughfare() + ", ";
+
+                        }
+
+                        if (listAddress.get(0).getThoroughfare() != null) {
+
+                            fullAddress += listAddress.get(0).getThoroughfare() + ", ";
+
+                        }
+
+                        if (listAddress.get(0).getLocality() != null) {
+
+                            fullAddress += listAddress.get(0).getLocality() + ", ";
+
+                        }
+
+                        if (listAddress.get(0).getCountryName() != null) {
+
+                            fullAddress += listAddress.get(0).getCountryName() + ", ";
+
+                        }
+
+                        if(listAddress.get(0).getPostalCode() != null) {
+
+                            fullAddress += listAddress.get(0).getPostalCode();
+
+                        }
+
+
+                        Toast.makeText(getApplicationContext(), fullAddress, Toast.LENGTH_LONG).show();
 
                     }
 
@@ -124,6 +158,10 @@ public class MainActivity extends AppCompatActivity {
 
                 Location lastKnownlocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
+                longitudeTextView.setText("Longitude " + Integer.toString((int) lastKnownlocation.getLongitude()));
+                latitudeTextView.setText("Latitude " + Integer.toString((int) lastKnownlocation.getLatitude()));
+
+
                 Geocoder geo = new Geocoder(getApplicationContext(), Locale.getDefault());
 
                 try {
@@ -132,7 +170,43 @@ public class MainActivity extends AppCompatActivity {
 
                     if(addressList != null && addressList.size() > 0) {
 
-                        Toast.makeText(getApplicationContext(), addressList.get(0).toString(),Toast.LENGTH_LONG).show();
+                        // concatenate users full address if info is available
+                        String fullAddress = "";
+
+
+                        if (addressList.get(0).getSubThoroughfare() != null) {
+
+                            fullAddress +=  addressList.get(0).getSubThoroughfare() + ", ";
+
+                        }
+
+                        if (addressList.get(0).getThoroughfare() != null) {
+
+                            fullAddress += addressList.get(0).getThoroughfare() + ", ";
+
+                        }
+
+                        if (addressList.get(0).getLocality() != null) {
+
+                            fullAddress += addressList.get(0).getLocality() + ", ";
+
+                        }
+
+                        if (addressList.get(0).getCountryName() != null) {
+
+                            fullAddress += addressList.get(0).getCountryName() + ", ";
+
+                        }
+
+                        if(addressList.get(0).getPostalCode() != null) {
+
+                            fullAddress += addressList.get(0).getPostalCode();
+
+                        }
+
+
+                        Toast.makeText(getApplicationContext(), fullAddress, Toast.LENGTH_LONG).show();
+
 
                     }
 
