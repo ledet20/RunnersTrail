@@ -15,6 +15,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -25,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
     LocationManager locationManager;
     LocationListener locationListener;
+    TextView longitudeTextView;
+    TextView latitudeTextView;
+    Button getLocation;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -46,11 +51,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        longitudeTextView = (TextView) findViewById(R.id.longitudeTextView);
+        latitudeTextView = (TextView) findViewById(R.id.latitudeTextView);
+        getLocation = (Button) findViewById(R.id.currentLocation);
+
          locationManager =  (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
          locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+
+                longitudeTextView.setText("Longitude " + Integer.toString((int) location.getLongitude()));
+                latitudeTextView.setText("Latitude " + Integer.toString((int) location.getLatitude()));
 
                 // location translated into language of users set device
                 Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
@@ -67,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                         String fullAddress = "";
 
                         Toast.makeText(getApplicationContext(), listAddress.get(0).toString(), Toast.LENGTH_LONG).show();
-                        
+
                     }
 
 
