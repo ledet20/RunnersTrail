@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(grantResults != null && grantResults.length > 0) {
+        if( grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)  == PackageManager.PERMISSION_GRANTED) {
 
@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLocationChanged(Location location) {
 
-                longitudeTextView.setText("Longitude: " + Integer.toString((int) location.getLongitude()));
-                latitudeTextView.setText("Latitude: " + Integer.toString((int) location.getLatitude()));
+                longitudeTextView.setText("Longitude: " +  location.getLongitude());
+                latitudeTextView.setText("Latitude: " +  location.getLatitude());
 
                 // location translated into language of users set device
                 Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
@@ -94,12 +94,12 @@ public class MainActivity extends AppCompatActivity {
                     if(listAddress != null && listAddress.size() > 0) {
 
                         // concatenate users full address if info is available
-                         fullAddress = "";
+                         fullAddress = " ";
 
 
                         if (listAddress.get(0).getSubThoroughfare() != null) {
 
-                            fullAddress += listAddress.get(0).getSubThoroughfare() + ", ";
+                           // fullAddress += listAddress.get(0).getSubThoroughfare() + ", ";
 
                         }
 
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        // if user is using version older than marshmallow location permission is not required  
+        // if user is using version older than marshmallow location permission is not required
         if(Build.VERSION.SDK_INT < 23) {
 
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
@@ -173,8 +173,8 @@ public class MainActivity extends AppCompatActivity {
 
                 Location lastKnownlocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-                longitudeTextView.setText("Longitude " + Integer.toString((int) lastKnownlocation.getLongitude()));
-                latitudeTextView.setText("Latitude " + Integer.toString((int) lastKnownlocation.getLatitude()));
+                longitudeTextView.setText("Longitude: " +  lastKnownlocation.getLongitude());
+                latitudeTextView.setText("Latitude: " + lastKnownlocation.getLatitude());
 
 
                 Geocoder geo = new Geocoder(getApplicationContext(), Locale.getDefault());
