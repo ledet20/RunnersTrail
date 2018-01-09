@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     TextView latitudeTextView;
     TextView currentLocationTextView;
     Button getLocation;
+    String fullAddress;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -43,6 +45,20 @@ public class MainActivity extends AppCompatActivity {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
             }
+
+        }
+    }
+
+    // on click function that set the users current location
+    public void updateCurrentLocation(View view) {
+
+        if(fullAddress.equals("")) {
+
+            currentLocationTextView.setText("Location not available");
+
+        } else {
+
+            currentLocationTextView.setText(fullAddress);
 
         }
     }
@@ -63,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLocationChanged(Location location) {
 
-                longitudeTextView.setText("Longitude " + Integer.toString((int) location.getLongitude()));
-                latitudeTextView.setText("Latitude " + Integer.toString((int) location.getLatitude()));
+                longitudeTextView.setText("Longitude: " + Integer.toString((int) location.getLongitude()));
+                latitudeTextView.setText("Latitude: " + Integer.toString((int) location.getLatitude()));
 
                 // location translated into language of users set device
                 Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
@@ -78,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     if(listAddress != null && listAddress.size() > 0) {
 
                         // concatenate users full address if info is available
-                        String fullAddress = "";
+                         fullAddress = "";
 
 
                         if (listAddress.get(0).getSubThoroughfare() != null) {
@@ -112,8 +128,6 @@ public class MainActivity extends AppCompatActivity {
                         }
 
 
-                        Toast.makeText(getApplicationContext(), fullAddress, Toast.LENGTH_LONG).show();
-
                     }
 
 
@@ -140,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        // if user is using version older than marshmallow location permission is not required  
         if(Build.VERSION.SDK_INT < 23) {
 
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
@@ -171,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
                     if(addressList != null && addressList.size() > 0) {
 
                         // concatenate users full address if info is available
-                        String fullAddress = "";
 
 
                         if (addressList.get(0).getSubThoroughfare() != null) {
@@ -205,16 +219,14 @@ public class MainActivity extends AppCompatActivity {
                         }
 
 
-                        Toast.makeText(getApplicationContext(), fullAddress, Toast.LENGTH_LONG).show();
-
-
                     }
 
                 } catch (IOException e) {
+
                     e.printStackTrace();
+
                 }
 
-                // LatLng currentLocation = new LatLng(lastKnownlocation.getLatitude(), lastKnownlocation.getLongitude());
 
             }
 
